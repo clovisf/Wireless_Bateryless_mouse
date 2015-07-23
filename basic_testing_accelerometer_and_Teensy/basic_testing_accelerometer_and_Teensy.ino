@@ -13,32 +13,49 @@
    This example code is in the public domain.
 */
 
+int Xaxis;
+int Yaxis;
+int analog0 = A1;
+int analog1 = A0;
+int CalibrationX;
+int CalibrationY;
+int MinusMinMovement = 2;
+int MinMovement = 2;
+int Yantigo;
+int Xantigo;
+
 void setup()
 {                
   Serial.begin(115200);
-  
+  delay(500);
+  CalibrationX= analogRead(analog0);
+  CalibrationY= analogRead(analog1);
+  delay(500);  
 }
 
-int Xaxis;
-int Yaxis;
+
 
 void loop()                     
 {
-  Xaxis = analogRead(0)-512;
-  Yaxis = analogRead(1)-512; 
-  /*
-  if (Xaxis < 10 || Xaxis > -10) {
+  Xaxis = analogRead(analog0)-CalibrationX;
+  Yaxis = analogRead(analog1)-CalibrationY;
+  
+  
+  if ((Xaxis + Xantigo < 3) || (Xaxis + Xantigo < -3)) {
   Xaxis = 0;
     }
-  if (Yaxis < 10 || Xaxis > -10) {
+  if ((Yaxis + Yantigo < 3) || (Yaxis + Yantigo < -3)) {
     Yaxis = 0;
     }
-    */
- Mouse.move(Xaxis, Yaxis); 
-  //Serial.print("X: ");
-  //Serial.print(Xaxis);
-  //Serial.print(" Y: ");
-  //Serial.println(Yaxis);
+   
+ Mouse.move(Xaxis, Yaxis);
+  Xantigo = Xaxis;
+  Yantigo = Yaxis;
+  
+  Serial.print("X: ");
+  Serial.print(Xaxis);
+  Serial.print(" Y: ");
+  Serial.println(Yaxis);
   delay(25);
 }
-
+  
